@@ -1,4 +1,11 @@
 const { By, until } = require('selenium-webdriver');
+const winston = require('winston');
+
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.simple(),
+    transports: [new winston.transports.Console()],
+});
 
 class HomePage {
     constructor(driver) {
@@ -12,35 +19,42 @@ class HomePage {
     }
 
     async enterDeparture(city) {
-        const input = await this.driver.findElement(this.departureInput);
-        await input.sendKeys(city);
+        logger.info(`Entering departure city: ${city}`);
+        await this.fillInput(this.departureInput, city);
     }
 
     async enterDestination(city) {
-        const input = await this.driver.findElement(this.destinationInput);
-        await input.sendKeys(city);
+        logger.info(`Entering destination city: ${city}`);
+        await this.fillInput(this.destinationInput, city);
     }
 
-    async selectStartDate(date) {
+    async selectStartDate() {
+        logger.info('Selecting start date.');
         const dateInput = await this.driver.findElement(this.startDateInput);
         await dateInput.click();
-
-        const dateElement = await this.driver.wait(
-            until.elementLocated(this.startDateContainer),
-            10000
-        );
+        const dateElement = await this.driver.wait(until.elementLocated(this.startDateContainer), 10000);
         await this.driver.wait(until.elementIsVisible(dateElement), 10000);
         await dateElement.click();
     }
 
     async closeNoBackButton() {
-        const button = await this.driver.findElement(this.noBackButton);
-        await button.click();
+        logger.info('Closing no-back button.');
+        await this.clickElement(this.noBackButton);
     }
 
     async clickSearch() {
-        const button = await this.driver.findElement(this.searchButton);
-        await button.click();
+        logger.info('Clicking search button.');
+        await this.clickElement(this.searchButton);
+    }
+
+    async fillInput(locator, value) {
+        const input = await this.driver.findElement(locator);
+        await input.sendKeys(value);
+    }
+
+    async clickElement(locator) {
+        const element = await this.driver.findElement(locator);
+        await element.click();
     }
 }
 
