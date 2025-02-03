@@ -46,12 +46,14 @@ class BookingPage {
     }
 
     async fillInput(locator, value) {
+        console.log('Filling input with value:', value);
         const element = await this.driver.wait(until.elementLocated(locator), 10000);
         await this.driver.wait(until.elementIsVisible(element), 10000);
         await element.sendKeys(value);
     }
 
     async clickElement(locator) {
+        console.log('Clicking element:', locator);
         const element = await this.driver.wait(until.elementLocated(locator), 10000);
         await this.driver.wait(until.elementIsVisible(element), 10000);
         await element.click();
