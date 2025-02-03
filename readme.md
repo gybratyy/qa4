@@ -20,6 +20,6 @@ Instructions on how to use the project.
 
 ```bash
 # Run the project
-node tests/BookingFlightTest.js
+npx jest
 ```
 
